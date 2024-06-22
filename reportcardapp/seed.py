@@ -2,10 +2,28 @@ from faker import Faker
 import random
 from .models import *
 from django.db.models import Sum
+
 fake=Faker()
+
+def seed_departments():
+    departments = ['Computer Science', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering', 'Physics', 'Chemistry', 'Biology', 'Mathematics']
+
+    for dept_name in departments:
+        Department.objects.get_or_create(department=dept_name)
+
+
+def seed_subjects():
+    subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science', 'C Programming', 'Python Programming', 'Database Management']
+
+
+    for subj_name in subjects:
+        Subject.objects.get_or_create(subject_name=subj_name)
 
 def seed_db(n=10) -> None:
     #->None means fn returns None
+    seed_departments()
+    seed_subjects()
+
     for _ in range(n):
         department_objects=Department.objects.all()
         if department_objects.exists():  # Check if there are any departments available
@@ -65,7 +83,7 @@ def generate_rank():
     #print(studentranklist.values_list('student_name', 'total_marks'))
 
     #mapping the rank of each student in Rank class, which contains student and rank 
-    i=1
+    rank_num = 1
 
     #studentranklist is an objectof Students only, since it has been annotated from students only
     for thisstudent in studentranklist:
@@ -73,8 +91,13 @@ def generate_rank():
         Rank.objects.create(
             #first member is student, second is student_rank, see Rank class
             student=thisstudent,
-            student_rank=i
+            student_rank=rank_num
         )
-        i=i+1
+        rank_num += 1
+
+if __name__ == '__main__':
+    seed_db()
+    create_subject_marks()
+    generate_rank()
     
   
