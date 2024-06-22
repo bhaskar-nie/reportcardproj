@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block start %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Student Report Card</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <strong>Student ID:</strong> {{ queryset.first.student.student_id.student_id }}
+        </div>
+        <div class="col-md-6">
+            <strong>Name:</strong> {{ queryset.first.student.student_name }}
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <strong>Department:</strong> {{ queryset.first.student.student_department.department }}
+        </div>
+        <div class="col-md-6">
+            <strong>Email:</strong> {{ queryset.first.student.student_email }}
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <strong>Age:</strong> {{ queryset.first.student.student_age }}
+        </div>
+        <div class="col-md-6">
+            <strong>Address:</strong> {{ queryset.first.student.student_address }}
+        </div>
+    </div>
+
+    <!-- Add rank display here -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Rank</h3>
+                    <p class="card-text display-1">{{ queryset.first.student.studentrank.first.student_rank }}</p>
+                    <!--all the objects are referred by their related_name variables-->
+                    <p class="card-title">Report Generated on: {{ queryset.first.student.studentrank.first.date_of_report_generation }}</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="mt-5 text-center">Marks Obtained</h3>
+    <table class="table table-bordered table-hover mt-3">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Subject</th>
+                <th scope="col">Marks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for query in queryset %}
+            <tr>
+                <td>{{ query.subject.subject_name }}</td>
+                <td>{{ query.marks }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">No marks available.</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td><strong>Total Marks</strong></td>
+                <td><strong>{{ total_marks }}</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
